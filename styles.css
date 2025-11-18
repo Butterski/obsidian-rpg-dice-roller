@@ -1,0 +1,395 @@
+/* RPG Dice Roller Plugin Styles */
+
+.dice-builder-container {
+	padding: 16px;
+	overflow-y: auto;
+}
+
+.dice-builder-title {
+	margin-top: 0;
+	margin-bottom: 16px;
+	font-weight: 600;
+}
+
+/* Formula Display */
+.dice-formula-display {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 12px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.dice-formula-text {
+	font-family: var(--font-monospace);
+	font-size: 1.1em;
+	font-weight: 500;
+	color: var(--text-normal);
+	flex: 1;
+}
+
+.dice-clear-button {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+	border-radius: 4px;
+	padding: 6px 12px;
+	cursor: pointer;
+	font-size: 0.9em;
+}
+
+.dice-clear-button:hover {
+	background-color: var(--interactive-accent-hover);
+}
+
+/* Sections */
+.dice-buttons-section,
+.dice-modifier-section,
+.dice-advdis-section,
+.dice-action-section,
+.dice-suggestions-section {
+	margin-bottom: 20px;
+}
+
+.dice-buttons-section h5,
+.dice-modifier-section h5,
+.dice-advdis-section h5,
+.dice-suggestions-section h5 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-size: 0.95em;
+	font-weight: 600;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+/* Dice Rows */
+.dice-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.dice-quantity-input,
+.dice-modifier-input {
+	width: 50px;
+	padding: 6px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 0.9em;
+}
+
+.dice-label {
+	font-weight: 600;
+	min-width: 50px;
+	color: var(--text-normal);
+}
+
+.dice-add-button,
+.dice-subtract-button {
+	padding: 6px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.95em;
+	transition: all 0.2s;
+}
+
+.dice-add-button {
+	background-color: var(--interactive-success);
+	color: white;
+	border-color: var(--interactive-success);
+}
+
+.dice-add-button:hover {
+	background-color: var(--interactive-success-hover);
+	transform: translateY(-1px);
+}
+
+.dice-subtract-button {
+	background-color: var(--background-secondary);
+	color: var(--text-normal);
+}
+
+.dice-subtract-button:hover {
+	background-color: var(--background-modifier-hover);
+	transform: translateY(-1px);
+}
+
+/* Common Modifiers */
+.common-modifiers {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+.common-label {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+
+.common-modifier-button {
+	padding: 4px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background-color: var(--background-secondary);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-size: 0.85em;
+	transition: all 0.2s;
+}
+
+.common-modifier-button:hover {
+	background-color: var(--interactive-hover);
+	transform: translateY(-1px);
+}
+
+/* Toggle Buttons */
+.dice-toggle-button {
+	flex: 1;
+	padding: 10px;
+	border: 2px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background-color: var(--background-secondary);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-weight: 600;
+	transition: all 0.2s;
+}
+
+.dice-toggle-button:hover {
+	border-color: var(--interactive-accent);
+}
+
+.dice-toggle-button.active {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border-color: var(--interactive-accent);
+}
+
+/* Action Buttons */
+.dice-action-section {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	border-top: 1px solid var(--background-modifier-border);
+	padding-top: 16px;
+}
+
+.dice-action-button {
+	padding: 10px 16px;
+	border: none;
+	border-radius: 6px;
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.95em;
+	transition: all 0.2s;
+}
+
+.dice-action-button:hover {
+	background-color: var(--interactive-accent-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Suggestions */
+.dice-suggestions-section {
+	border-top: 1px solid var(--background-modifier-border);
+	padding-top: 16px;
+}
+
+.dice-no-suggestions {
+	color: var(--text-muted);
+	font-size: 0.9em;
+	font-style: italic;
+}
+
+.dice-suggestions-list {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.dice-suggestion-item {
+	padding: 8px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background-color: var(--background-secondary);
+	cursor: pointer;
+	transition: all 0.2s;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+}
+
+.dice-suggestion-item:hover {
+	background-color: var(--interactive-hover);
+	border-color: var(--interactive-accent);
+}
+
+.dice-suggestion-left {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex: 1;
+	cursor: pointer;
+	padding: 4px;
+	border-radius: 3px;
+	transition: all 0.2s;
+}
+
+.dice-suggestion-left:hover {
+	transform: translateX(2px);
+}
+
+.dice-suggestion-formula {
+	font-family: var(--font-monospace);
+	font-weight: 600;
+	color: var(--text-normal);
+}
+
+.dice-suggestion-source {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	margin-left: 8px;
+}
+
+.dice-suggestion-add-btn {
+	padding: 4px 12px;
+	border: 1px solid var(--interactive-accent);
+	border-radius: 4px;
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	cursor: pointer;
+	font-size: 0.85em;
+	font-weight: 600;
+	transition: all 0.2s;
+	white-space: nowrap;
+}
+
+.dice-suggestion-add-btn:hover {
+	background-color: var(--interactive-accent-hover);
+	transform: scale(1.05);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.dice-suggestion-add-btn:active {
+	transform: scale(0.98);
+}
+
+/* About Section in Settings */
+.dice-roller-about {
+	padding: 16px;
+	background-color: var(--background-secondary);
+	border-radius: 8px;
+	margin-top: 16px;
+}
+
+.dice-roller-about p {
+	margin: 8px 0;
+	color: var(--text-normal);
+}
+
+.dice-roller-about ul {
+	margin-left: 20px;
+	color: var(--text-muted);
+}
+
+.dice-roller-about li {
+	margin: 4px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.dice-builder-container {
+		padding: 12px;
+	}
+
+	.dice-row {
+		gap: 6px;
+	}
+
+	.dice-action-section {
+		gap: 6px;
+	}
+}
+
+/* ROLL[...] Syntax Styling in Notes */
+.markdown-preview-view code:has-text("ROLL["),
+.markdown-rendered code:has-text("ROLL[") {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	font-weight: 600;
+	padding: 2px 6px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+/* Better styling for ROLL syntax */
+.cm-inline-code:has-text("ROLL[") {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+	font-weight: 600;
+}
+
+/* Fallback: Style any code containing ROLL */
+code[class*="ROLL"],
+.markdown-preview-view code,
+.markdown-rendered code {
+	position: relative;
+}
+
+/* Make ROLL syntax stand out with custom class */
+.dice-roll-syntax {
+	background: linear-gradient(135deg, var(--interactive-accent) 0%, var(--interactive-accent-hover) 100%) !important;
+	color: var(--text-on-accent) !important;
+	font-weight: 700 !important;
+	padding: 3px 8px !important;
+	border-radius: 5px !important;
+	cursor: pointer !important;
+	border: 1px solid var(--interactive-accent) !important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+	transition: all 0.2s !important;
+	display: inline-block !important;
+	font-size: 0.95em !important;
+}
+
+.dice-roll-syntax:hover {
+	transform: translateY(-1px) !important;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+	filter: brightness(1.1) !important;
+}
+
+.dice-roll-syntax::before {
+	content: "🎲 ";
+	font-size: 0.9em;
+}
+
+/* Hide ROLL[ and ] text, show only the formula */
+.dice-roll-syntax {
+	font-size: 0 !important;
+}
+
+.dice-roll-syntax::before {
+	font-size: 1rem !important;
+}
+
+.dice-roll-syntax::after {
+	content: attr(data-formula);
+	font-size: 0.95rem !important;
+	font-family: var(--font-monospace);
+}
