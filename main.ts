@@ -18,7 +18,7 @@ export default class DiceRollerPlugin extends Plugin {
 
 		// Add ribbon icon to open dice roller
 		this.addRibbonIcon('dice', 'Open Dice Roller', () => {
-			this.activateDiceView();
+			void this.activateDiceView();
 		});
 
 		// Add command to open dice roller
@@ -26,7 +26,7 @@ export default class DiceRollerPlugin extends Plugin {
 			id: 'open-dice-roller',
 			name: 'Open Dice Roller',
 			callback: () => {
-				this.activateDiceView();
+				void this.activateDiceView();
 			}
 		});
 
@@ -54,10 +54,10 @@ export default class DiceRollerPlugin extends Plugin {
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(DICE_BUILDER_VIEW_TYPE);
+		
 	}
 
-	async activateDiceView() {
+	async activateDiceView(): Promise<DiceBuilderView | null> {
 		const { workspace } = this.app;
 
 		let leaf: WorkspaceLeaf | null = null;
@@ -81,8 +81,12 @@ export default class DiceRollerPlugin extends Plugin {
 
 		// Reveal the leaf in case it is in a collapsed sidebar
 		if (leaf) {
-			workspace.revealLeaf(leaf);
+			await workspace.revealLeaf(leaf);
+			if (leaf.view instanceof DiceBuilderView) {
+				return leaf.view;
+			}
 		}
+		return null;
 	}
 
 	refreshDiceView() {
@@ -96,7 +100,7 @@ export default class DiceRollerPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, ((await this.loadData()) ?? {}) as Partial<DiceRollerSettings>);
 	}
 
 	async saveSettings() {

@@ -393,3 +393,13 @@ code[class*="ROLL"],
 	font-size: 0.95rem !important;
 	font-family: var(--font-monospace);
 }
+
+.dice-roll-clickable {
+	cursor: pointer;
+	transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.dice-roll-clickable:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

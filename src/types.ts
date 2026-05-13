@@ -4,12 +4,14 @@ export interface DiceRollerSettings {
 	discordPrefix: string;
 	roll20Prefix: string;
 	defaultPlatform: 'discord' | 'roll20';
+	enableInlineFormulas: boolean;
 }
 
 export const DEFAULT_SETTINGS: DiceRollerSettings = {
 	discordPrefix: '.r',
 	roll20Prefix: '/roll',
-	defaultPlatform: 'discord'
+	defaultPlatform: 'discord',
+	enableInlineFormulas: true
 }
 
 export interface DiceFormula {

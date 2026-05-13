@@ -10,6 +10,8 @@ export const DICE_BUILDER_VIEW_TYPE = 'dice-builder-view';
 export class DiceBuilderView extends ItemView {
 	plugin: DiceRollerPlugin;
 	private currentFormula: DiceFormula;
+	private builderContainer: HTMLElement;
+	private suggestionsContainer: HTMLElement;
 
 	constructor(leaf: WorkspaceLeaf, plugin: DiceRollerPlugin) {
 		super(leaf);
@@ -30,21 +32,27 @@ export class DiceBuilderView extends ItemView {
 	}
 
 	async onOpen(): Promise<void> {
-		const container = this.containerEl.children[1];
-		container.empty();
-		container.addClass('dice-builder-container');
+		this.contentEl.empty();
+		this.contentEl.addClass('dice-builder-container');
 
-		this.render(container);
+		this.builderContainer = this.contentEl.createDiv({ cls: 'dice-builder-section' });
+		this.suggestionsContainer = this.contentEl.createDiv({ cls: 'dice-suggestions-section' });
+
+		this.render();
 	}
 
 	async onClose(): Promise<void> {
-		const container = this.containerEl.children[1];
-		container.empty();
+		this.contentEl.empty();
 	}
 
-	private render(containerEl?: Element): void {
-		const container = containerEl || this.containerEl.children[1];
-		container.empty();
+	private render(): void {
+		this.renderBuilder();
+		this.renderSuggestions();
+	}
+
+	private renderBuilder(): void {
+		this.builderContainer.empty();
+		const container = this.builderContainer;
 
 		// Title
 		const titleEl = container.createEl('h4', { text: 'Dice Formula Builder' });
@@ -63,7 +71,7 @@ export class DiceBuilderView extends ItemView {
 		clearBtn.addClass('dice-clear-button');
 		clearBtn.onclick = () => {
 			this.currentFormula = { parts: [], advantage: false, disadvantage: false };
-			this.render();
+			this.renderBuilder();
 		};
 
 		// Dice buttons section
@@ -167,7 +175,7 @@ export class DiceBuilderView extends ItemView {
 			if (this.currentFormula.advantage) {
 				this.currentFormula.disadvantage = false;
 			}
-			this.render();
+			this.renderBuilder();
 		};
 
 		const disBtn = advDisRow.createEl('button', { 
@@ -180,7 +188,7 @@ export class DiceBuilderView extends ItemView {
 			if (this.currentFormula.disadvantage) {
 				this.currentFormula.advantage = false;
 			}
-			this.render();
+			this.renderBuilder();
 		};
 
 		// Action buttons
@@ -197,9 +205,6 @@ export class DiceBuilderView extends ItemView {
 		const rollSyntaxBtn = actionSection.createEl('button', { text: 'Create ROLL[...] Syntax' });
 		rollSyntaxBtn.addClass('dice-action-button');
 		rollSyntaxBtn.onclick = () => this.createRollSyntax();
-
-		// Suggestions section
-		this.renderSuggestions();
 	}
 
 	private addDice(quantity: number, sides: number, operator: '+' | '-'): void {
@@ -210,7 +215,7 @@ export class DiceBuilderView extends ItemView {
 			operator
 		};
 		this.currentFormula.parts.push(part);
-		this.render();
+		this.renderBuilder();
 	}
 
 	private addModifier(value: number, operator: '+' | '-'): void {
@@ -220,7 +225,7 @@ export class DiceBuilderView extends ItemView {
 			operator
 		};
 		this.currentFormula.parts.push(part);
-		this.render();
+		this.renderBuilder();
 	}
 
 	private getCommandPrefix(): string {
@@ -274,15 +279,16 @@ export class DiceBuilderView extends ItemView {
 	}
 
 	private renderSuggestions(): void {
-		const container = this.containerEl.children[1];
-		const suggestionsSection = container.createDiv({ cls: 'dice-suggestions-section' });
-		suggestionsSection.createEl('h5', { text: 'Suggestions from Open Notes' });
+		const container = this.suggestionsContainer;
+		container.empty();
+		
+		container.createEl('h5', { text: 'Suggestions from Open Notes' });
 
 		// Get all open markdown views
 		const markdownLeaves = this.app.workspace.getLeavesOfType('markdown');
 		
 		if (markdownLeaves.length === 0) {
-			suggestionsSection.createEl('p', { 
+			container.createEl('p', { 
 				text: 'No open notes',
 				cls: 'dice-no-suggestions'
 			});
@@ -308,8 +314,11 @@ export class DiceBuilderView extends ItemView {
 		// Detect ROLL[...] syntax
 		const rollSyntaxMatches = DiceParser.detectRollSyntax(content);
 		
-		// Detect inline formulas
-		const inlineMatches = DiceParser.detectInlineFormulas(content);
+		// Detect inline formulas (if enabled)
+		let inlineMatches: Array<{formula: string, start: number, end: number}> = [];
+		if (this.plugin.settings.enableInlineFormulas) {
+			inlineMatches = DiceParser.detectInlineFormulas(content);
+		}
 
 		const allMatches = [
 			...rollSyntaxMatches.map(m => ({ formula: m.formula, source: '📌 ROLL' })),
@@ -326,26 +335,26 @@ export class DiceBuilderView extends ItemView {
 		});
 
 		if (uniqueFormulas.size === 0) {
-			suggestionsSection.createEl('p', { 
+			container.createEl('p', { 
 				text: 'No dice formulas found in current note',
 				cls: 'dice-no-suggestions'
 			});
 			return;
 		}
 
-		const suggestionsList = suggestionsSection.createDiv({ cls: 'dice-suggestions-list' });
+		const suggestionsList = container.createDiv({ cls: 'dice-suggestions-list' });
 		
 		uniqueFormulas.forEach((match) => {
 			const suggestionItem = suggestionsList.createDiv({ cls: 'dice-suggestion-item' });
 			
 			const leftSection = suggestionItem.createDiv({ cls: 'dice-suggestion-left' });
 			
-			const formulaSpan = leftSection.createEl('span', { 
+			leftSection.createEl('span', { 
 				text: match.formula,
 				cls: 'dice-suggestion-formula'
 			});
 			
-			const sourceSpan = leftSection.createEl('span', { 
+			leftSection.createEl('span', { 
 				text: match.source,
 				cls: 'dice-suggestion-source'
 			});
@@ -356,7 +365,7 @@ export class DiceBuilderView extends ItemView {
 				const parsed = DiceParser.parse(match.formula);
 				if (parsed) {
 					this.currentFormula = parsed;
-					this.render();
+					this.renderBuilder();
 					new Notice(`Loaded: ${match.formula}`);
 				}
 			};
@@ -386,7 +395,7 @@ export class DiceBuilderView extends ItemView {
 						this.currentFormula.advantage = false;
 					}
 					
-					this.render();
+					this.renderBuilder();
 					new Notice(`Added: ${match.formula}`);
 				}
 			};
@@ -399,6 +408,6 @@ export class DiceBuilderView extends ItemView {
 
 	public loadFormula(formula: DiceFormula): void {
 		this.currentFormula = formula;
-		this.render();
+		this.renderBuilder();
 	}
 }

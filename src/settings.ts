@@ -16,7 +16,9 @@ export class DiceRollerSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'RPG Dice Roller Settings' });
+		new Setting(containerEl)
+			.setName('RPG Dice Roller Settings')
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName('Default platform')
@@ -50,6 +52,17 @@ export class DiceRollerSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.roll20Prefix = value || '/roll';
 					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Enable inline formula detection')
+			.setDesc('Automatically detect dice formulas like "1d20 + 5" in your notes. If disabled, only ROLL[...] syntax will be detected.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.enableInlineFormulas)
+				.onChange(async (value) => {
+					this.plugin.settings.enableInlineFormulas = value;
+					await this.plugin.saveSettings();
+					this.plugin.refreshDiceView();
 				}));
 
 		containerEl.createEl('h3', { text: 'About' });

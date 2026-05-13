@@ -25,53 +25,42 @@ export function registerRollSyntaxProcessor(plugin: DiceRollerPlugin) {
 				codeEl.setAttribute('data-formula', formula);
 				
 				// Make it clickable
-				codeEl.style.cursor = 'pointer';
+				codeEl.addClass('dice-roll-clickable');
 				
 				// Add click handler
-				codeEl.addEventListener('click', async (e) => {
+				codeEl.addEventListener('click', (e) => {
 					e.preventDefault();
 					e.stopPropagation();
 					
 					const parsed = DiceParser.parse(formula);
 					
 					if (parsed) {
-						// Find the dice view and load the formula
-						const leaves = plugin.app.workspace.getLeavesOfType('dice-builder-view');
-						
-						if (leaves.length > 0) {
-							const view = leaves[0].view;
-							if (view instanceof DiceBuilderView) {
-								view.loadFormula(parsed);
-								plugin.app.workspace.revealLeaf(leaves[0]);
-								new Notice(`Loaded dice formula: ${formula}`);
-							}
-						} else {
-							// Open the dice view first
-							await plugin.activateDiceView();
-							// Wait a bit for the view to open
-							setTimeout(() => {
-								const newLeaves = plugin.app.workspace.getLeavesOfType('dice-builder-view');
-								if (newLeaves.length > 0) {
-									const view = newLeaves[0].view;
-									if (view instanceof DiceBuilderView) {
-										view.loadFormula(parsed);
-										new Notice(`Loaded dice formula: ${formula}`);
-									}
+						void (async () => {
+							// Find the dice view and load the formula
+							const leaves = plugin.app.workspace.getLeavesOfType('dice-builder-view');
+							
+							if (leaves.length > 0) {
+								const view = leaves[0].view;
+								if (view instanceof DiceBuilderView) {
+									view.loadFormula(parsed);
+									
+									// Use window.setTimeout per popout window guidelines
+									window.setTimeout(() => {
+										void plugin.app.workspace.revealLeaf(leaves[0]);
+									}, 10);
+									
+									new Notice(`Loaded dice formula: ${formula}`);
 								}
-							}, 100);
-						}
+							} else {
+								// Open the dice view first
+								const view = await plugin.activateDiceView();
+								if (view) {
+									view.loadFormula(parsed);
+									new Notice(`Loaded dice formula: ${formula}`);
+								}
+							}
+						})();
 					}
-				});
-				
-				// Add hover effect
-				codeEl.addEventListener('mouseenter', () => {
-					codeEl.style.transform = 'translateY(-1px)';
-					codeEl.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-				});
-				
-				codeEl.addEventListener('mouseleave', () => {
-					codeEl.style.transform = '';
-					codeEl.style.boxShadow = '';
 				});
 			}
 		});

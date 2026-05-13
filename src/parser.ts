@@ -68,7 +68,7 @@ export class DiceParser {
 				advantage,
 				disadvantage
 			};
-		} catch (e) {
+		} catch (_) {
 			return null;
 		}
 	}
@@ -135,13 +135,21 @@ export class DiceParser {
 	 * Example: "Roll 2d6 + 4 for damage" or "Attack: 1d20 + 5"
 	 */
 	static detectInlineFormulas(text: string): Array<{formula: string, start: number, end: number}> {
-		// Match common dice patterns: XdY, XdY+Z, XdY-Z, etc.
-		const regex = /(\d*d\d+(?:[a-z]+[<>]?\d+)?(?:\s*[+-]\s*(?:\d*d\d+(?:[a-z]+[<>]?\d+)?|\d+))*(?:\s+(?:adv|dis|advantage|disadvantage))?)/gi;
+		// Match common dice patterns: XdY, XdY+Z, XdY-Z, Z+XdY, etc.
+		// We match a sequence of terms (dice or numbers) separated by + or -
+		// Then we filter to ensure at least one dice term is present
+		const regex = /((?:\d*d\d+(?:[a-z]+[<>]?\d+)?|\d+)(?:\s*[+-]\s*(?:\d*d\d+(?:[a-z]+[<>]?\d+)?|\d+))*(?:\s+(?:adv|dis|advantage|disadvantage))?)/gi;
 		const results = [];
 		let match;
 
 		while ((match = regex.exec(text)) !== null) {
 			const formula = match[1].trim();
+			
+			// Must contain a 'd' to be a dice formula (avoids matching just "5 + 5")
+			if (!formula.toLowerCase().includes('d')) {
+				continue;
+			}
+
 			// Validate it's a real dice formula
 			if (this.parse(formula)) {
 				results.push({

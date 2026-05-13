@@ -1,11 +1,10 @@
 {
 	"id": "rpg-dice-roller",
 	"name": "RPG Dice Roller",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
+	"version": "1.1.0",
+	"minAppVersion": "1.7.2",
 	"description": "Build RPG dice roll commands with d20 syntax for Discord and Roll20. Create formulas visually with advantage/disadvantage support.",
 	"author": "Miłosz Kucharski",
-	"authorUrl": "https://mzkuch.pl",
-	"fundingUrl": "https://github.com/sponsors/Butterski",
+	"fundingUrl": "https://buymeacoffee.com/butterski",
 	"isDesktopOnly": false
 }
