@@ -27,8 +27,8 @@ export class DiceRollerSettingTab extends PluginSettingTab {
 				.addOption('discord', 'Discord')
 				.addOption('roll20', 'Roll20')
 				.setValue(this.plugin.settings.defaultPlatform)
-				.onChange(async (value: 'discord' | 'roll20') => {
-					this.plugin.settings.defaultPlatform = value;
+				.onChange(async (value: string) => {
+					this.plugin.settings.defaultPlatform = value as 'discord' | 'roll20';
 					await this.plugin.saveSettings();
 				}));
 
