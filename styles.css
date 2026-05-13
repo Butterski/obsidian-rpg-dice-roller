@@ -327,70 +327,39 @@
 	}
 }
 
-/* ROLL[...] Syntax Styling in Notes */
-.markdown-preview-view code:has-text("ROLL["),
-.markdown-rendered code:has-text("ROLL[") {
-	background-color: var(--interactive-accent);
-	color: var(--text-on-accent);
-	font-weight: 600;
-	padding: 2px 6px;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: all 0.2s;
-}
-
-/* Better styling for ROLL syntax */
-.cm-inline-code:has-text("ROLL[") {
-	background-color: var(--interactive-accent);
-	color: var(--text-on-accent);
-	font-weight: 600;
-}
-
-/* Fallback: Style any code containing ROLL */
-code[class*="ROLL"],
-.markdown-preview-view code,
-.markdown-rendered code {
-	position: relative;
-}
-
 /* Make ROLL syntax stand out with custom class */
-.dice-roll-syntax {
-	background: linear-gradient(135deg, var(--interactive-accent) 0%, var(--interactive-accent-hover) 100%) !important;
-	color: var(--text-on-accent) !important;
-	font-weight: 700 !important;
-	padding: 3px 8px !important;
-	border-radius: 5px !important;
-	cursor: pointer !important;
-	border: 1px solid var(--interactive-accent) !important;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-	transition: all 0.2s !important;
-	display: inline-block !important;
-	font-size: 0.95em !important;
+.markdown-preview-view code.dice-roll-syntax,
+.markdown-rendered code.dice-roll-syntax {
+	background: linear-gradient(135deg, var(--interactive-accent) 0%, var(--interactive-accent-hover) 100%);
+	color: var(--text-on-accent);
+	font-weight: 700;
+	padding: 3px 8px;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 1px solid var(--interactive-accent);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: all 0.2s;
+	display: inline-block;
+	font-size: 0;
 }
 
-.dice-roll-syntax:hover {
-	transform: translateY(-1px) !important;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-	filter: brightness(1.1) !important;
+.markdown-preview-view code.dice-roll-syntax:hover,
+.markdown-rendered code.dice-roll-syntax:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	filter: brightness(1.1);
 }
 
-.dice-roll-syntax::before {
+.markdown-preview-view code.dice-roll-syntax::before,
+.markdown-rendered code.dice-roll-syntax::before {
 	content: "🎲 ";
-	font-size: 0.9em;
+	font-size: 1rem;
 }
 
-/* Hide ROLL[ and ] text, show only the formula */
-.dice-roll-syntax {
-	font-size: 0 !important;
-}
-
-.dice-roll-syntax::before {
-	font-size: 1rem !important;
-}
-
-.dice-roll-syntax::after {
+.markdown-preview-view code.dice-roll-syntax::after,
+.markdown-rendered code.dice-roll-syntax::after {
 	content: attr(data-formula);
-	font-size: 0.95rem !important;
+	font-size: 0.95rem;
 	font-family: var(--font-monospace);
 }
 
