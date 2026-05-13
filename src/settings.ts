@@ -17,7 +17,7 @@ export class DiceRollerSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('RPG Dice Roller Settings')
+			.setName('General')
 			.setHeading();
 
 		new Setting(containerEl)
@@ -65,7 +65,9 @@ export class DiceRollerSettingTab extends PluginSettingTab {
 					this.plugin.refreshDiceView();
 				}));
 
-		containerEl.createEl('h3', { text: 'About' });
+		new Setting(containerEl)
+			.setName('About')
+			.setHeading();
 		
 		const aboutDiv = containerEl.createDiv({ cls: 'dice-roller-about' });
 		aboutDiv.createEl('p', { 

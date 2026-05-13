@@ -68,7 +68,7 @@ export class DiceParser {
 				advantage,
 				disadvantage
 			};
-		} catch (_) {
+		} catch {
 			return null;
 		}
 	}
