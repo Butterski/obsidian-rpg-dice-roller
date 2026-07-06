@@ -4,6 +4,7 @@ import { MarkdownPostProcessorContext, Notice } from 'obsidian';
 import { DiceParser } from './parser';
 import DiceRollerPlugin from '../main';
 import { DiceBuilderView } from './view';
+import { buildDiceCommand } from './command-format';
 
 export function registerRollSyntaxProcessor(plugin: DiceRollerPlugin) {
 	plugin.registerMarkdownPostProcessor((element: HTMLElement, context: MarkdownPostProcessorContext) => {
@@ -26,6 +27,7 @@ export function registerRollSyntaxProcessor(plugin: DiceRollerPlugin) {
 				
 				// Make it clickable
 				codeEl.addClass('dice-roll-clickable');
+				codeEl.setAttribute('title', 'Click to load in dice builder. Ctrl-click to copy command.');
 				
 				// Add click handler
 				codeEl.addEventListener('click', (e) => {
@@ -36,6 +38,13 @@ export function registerRollSyntaxProcessor(plugin: DiceRollerPlugin) {
 					
 					if (parsed) {
 						void (async () => {
+							if (e.ctrlKey || e.metaKey) {
+								const command = buildDiceCommand(plugin.settings, formula);
+								await navigator.clipboard.writeText(command);
+								new Notice(`Copied command: ${command}`);
+								return;
+							}
+
 							// Find the dice view and load the formula
 							const leaves = plugin.app.workspace.getLeavesOfType('dice-builder-view');
 							

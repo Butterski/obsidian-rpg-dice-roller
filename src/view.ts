@@ -3,6 +3,7 @@
 import { ItemView, WorkspaceLeaf, MarkdownView, Notice } from 'obsidian';
 import { DiceFormula, DicePart } from './types';
 import { DiceParser } from './parser';
+import { buildDiceCommand } from './command-format';
 import DiceRollerPlugin from '../main';
 
 export const DICE_BUILDER_VIEW_TYPE = 'dice-builder-view';
@@ -55,7 +56,7 @@ export class DiceBuilderView extends ItemView {
 		const container = this.builderContainer;
 
 		// Title
-		const titleEl = container.createEl('h4', { text: 'Dice Formula Builder' });
+		const titleEl = container.createEl('h4', { text: 'Dice formula builder' });
 		titleEl.addClass('dice-builder-title');
 
 		// Formula display
@@ -76,7 +77,7 @@ export class DiceBuilderView extends ItemView {
 
 		// Dice buttons section
 		const diceSection = container.createDiv({ cls: 'dice-buttons-section' });
-		diceSection.createEl('h5', { text: 'Add Dice' });
+		diceSection.createEl('h5', { text: 'Add dice' });
 
 		const diceTypes = [
 			{ sides: 4, label: 'd4' },
@@ -121,7 +122,7 @@ export class DiceBuilderView extends ItemView {
 
 		// Modifier section
 		const modifierSection = container.createDiv({ cls: 'dice-modifier-section' });
-		modifierSection.createEl('h5', { text: 'Add Modifier' });
+		modifierSection.createEl('h5', { text: 'Add modifier' });
 
 		const modifierRow = modifierSection.createDiv({ cls: 'dice-row' });
 		const modifierInput = modifierRow.createEl('input', {
@@ -161,7 +162,7 @@ export class DiceBuilderView extends ItemView {
 
 		// Advantage/Disadvantage section
 		const advDisSection = container.createDiv({ cls: 'dice-advdis-section' });
-		advDisSection.createEl('h5', { text: 'Roll Type' });
+		advDisSection.createEl('h5', { text: 'Roll type' });
 
 		const advDisRow = advDisSection.createDiv({ cls: 'dice-row' });
 
@@ -194,15 +195,15 @@ export class DiceBuilderView extends ItemView {
 		// Action buttons
 		const actionSection = container.createDiv({ cls: 'dice-action-section' });
 
-		const copyBtn = actionSection.createEl('button', { text: 'Copy Command' });
+		const copyBtn = actionSection.createEl('button', { text: 'Copy command' });
 		copyBtn.addClass('dice-action-button');
 		copyBtn.onclick = () => this.copyCommand();
 
-		const insertBtn = actionSection.createEl('button', { text: 'Insert to Note' });
+		const insertBtn = actionSection.createEl('button', { text: 'Insert to note' });
 		insertBtn.addClass('dice-action-button');
 		insertBtn.onclick = () => this.insertToNote();
 
-		const rollSyntaxBtn = actionSection.createEl('button', { text: 'Create ROLL[...] Syntax' });
+		const rollSyntaxBtn = actionSection.createEl('button', { text: 'Copy ROLL syntax' });
 		rollSyntaxBtn.addClass('dice-action-button');
 		rollSyntaxBtn.onclick = () => this.createRollSyntax();
 	}
@@ -228,12 +229,6 @@ export class DiceBuilderView extends ItemView {
 		this.renderBuilder();
 	}
 
-	private getCommandPrefix(): string {
-		const platform = this.plugin.settings.defaultPlatform;
-		return platform === 'discord' 
-			? this.plugin.settings.discordPrefix 
-			: this.plugin.settings.roll20Prefix;
-	}
 
 	private async copyCommand(): Promise<void> {
 		const formula = DiceParser.toString(this.currentFormula);
@@ -242,7 +237,7 @@ export class DiceBuilderView extends ItemView {
 			return;
 		}
 
-		const command = `${this.getCommandPrefix()} ${formula}`;
+		const command = buildDiceCommand(this.plugin.settings, formula);
 		await navigator.clipboard.writeText(command);
 		new Notice('Command copied to clipboard!');
 	}
@@ -260,7 +255,7 @@ export class DiceBuilderView extends ItemView {
 			return;
 		}
 
-		const command = `${this.getCommandPrefix()} ${formula}`;
+		const command = buildDiceCommand(this.plugin.settings, formula);
 		const editor = view.editor;
 		editor.replaceSelection(command);
 		new Notice('Command inserted!');
@@ -282,7 +277,7 @@ export class DiceBuilderView extends ItemView {
 		const container = this.suggestionsContainer;
 		container.empty();
 		
-		container.createEl('h5', { text: 'Suggestions from Open Notes' });
+		container.createEl('h5', { text: 'Suggestions from open notes' });
 
 		// Get all open markdown views
 		const markdownLeaves = this.app.workspace.getLeavesOfType('markdown');
